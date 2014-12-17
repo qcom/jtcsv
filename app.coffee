@@ -139,35 +139,38 @@ clean = (s) ->
 	t = getType s
 	if t is 'string' then s.replace(/[\r\n]/g, '') else s
 
+superClean = (s) -> if getType(s) is 'string' then s.replace(/[\r\n]/g, '').replace(/\n/g, '').replace(/\t/g, '') else s
+
 exp = (header, data) ->
 	s = ''
 	for h in header
-		s = "#{s}#{if h.display? then h.display else h.name}\t"
+		s = "#{s}#{if h.display? then superClean(h.display) else superClean(h.name)}\t"
+	fs.writeFileSync './header.txt', s
 	s += '\n'
 	for key, obj of data
 		for h in header
 			if h.simple
 				if obj[h.name]? and h.validate obj[h.name]
-					val = obj[h.name]
+					val = superClean(obj[h.name])
 					s = "#{s}#{if val? then clean val else ''}\t"
 				else
 					s = "#{s}\t"
 			else if h.object
 				if obj[h.parent]? and h.validate obj[h.parent]
-					val = obj[h.parent][h.name]
+					val = superClean(obj[h.parent][h.name])
 					s = "#{s}#{if val? then clean val else ''}\t"
 				else
 					s = "#{s}\t"
 			else if h.array
 				if obj[h.parent]? and h.validate obj[h.parent]
-					val = obj[h.parent][h.index]
+					val = superClean(obj[h.parent][h.index])
 					s = "#{s}#{if val? then clean val else ''}\t"
 				else
 					s = "#{s}\t"
 			else if h.complexArray
 				if obj[h.parent]? and h.validate obj[h.parent]
 					val = obj[h.parent][h.index]
-					val = val[h.name] if val?
+					val = superClean(val[h.name]) if val?
 					s = "#{s}#{if val? then clean val else ''}\t"
 				else
 					s = "#{s}\t"
@@ -175,4 +178,4 @@ exp = (header, data) ->
 	s
 
 result = exp header, api
-fs.writeFileSync './out.csv', result
+fs.writeFileSync './out.txt', result
