@@ -1,6 +1,6 @@
 *.swp
 *.swo
-*.json
-*.js
 *.csv
 *.txt
+data/
+dist/
