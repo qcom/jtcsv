@@ -1,5 +1,5 @@
 fs = require 'fs'
-api = require '../data/masterlock-api_5-10-17'
+api = require '../data/2-22-18_prod_parsed.json'
 
 ## modules
 types = require './modules/types'
