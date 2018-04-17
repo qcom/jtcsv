@@ -1,5 +1,5 @@
 fs = require 'fs'
-api = require './data/dump'
+api = require '../data/masterlock-api_5-10-17'
 
 ## modules
 types = require './modules/types'
